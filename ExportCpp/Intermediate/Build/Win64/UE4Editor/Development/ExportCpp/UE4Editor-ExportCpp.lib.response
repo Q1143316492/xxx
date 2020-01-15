@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-ExportCpp.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\ue4\UE_CPP\UEPyExportVer0\Intermediate\Build\Win64\UEPyExportVer0Editor\Development\UnrealEd\SharedPCH.UnrealEd.h.obj"
+"D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Intermediate\Build\Win64\UE4Editor\Development\ExportCpp\Module.ExportCpp.cpp.obj"
+"D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Intermediate\Build\Win64\UE4Editor\Development\ExportCpp\Default.rc2.res"
+/OUT:"D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Intermediate\Build\Win64\UE4Editor\Development\ExportCpp\UE4Editor-ExportCpp.lib"
+/INCLUDE:IMPLEMENT_MODULE_ExportCpp

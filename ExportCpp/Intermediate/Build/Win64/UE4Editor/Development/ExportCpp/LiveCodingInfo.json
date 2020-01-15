@@ -1,0 +1,10 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.ExportCpp.cpp.obj": [
+			"ExportCpp.cpp.obj",
+			"ExportCppCommands.cpp.obj",
+			"ExportCppStyle.cpp.obj"
+		]
+	}
+}
