@@ -138,12 +138,17 @@ static PyMethodDef unreal_actor_methods[] = {
 	{ NULL, NULL, NULL }
 };
 
+static void Custom_dealloc(PyObject *self)
+{
+	Py_TYPE(self)->tp_free((PyObject *)self);
+}
+
 static PyTypeObject ue_PyActorType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"ue_actor.actor",          /* tp_name */
 	sizeof(ue_ExPyActor),      /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	0,					       /* tp_dealloc */
+	Custom_dealloc,		       /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -158,8 +163,8 @@ static PyTypeObject ue_PyActorType = {
 	0,						   /* tp_getattro */
 	0,						   /* tp_setattro */
 	0,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT,  /* tp_flags */
-	"ue_actor actor",           /* tp_doc */
+	Py_TPFLAGS_DEFAULT,		   /* tp_flags */
+	"ue_actor actor",          /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -223,8 +228,6 @@ void test_export_actor()
 #else
 	PyObject* new_unreal_actor_module = Py_InitModule3("ue_actor", NULL, NULL);
 #endif
-
-	// add class
 
 	//ue_PyActorType.tp_new = PyType_GenericNew;
 	ue_PyActorType.tp_init = (initproc)ue_actor_magic_init;
