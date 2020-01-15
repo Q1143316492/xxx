@@ -1,4 +1,7 @@
+
+
 #include "UEPyModule.h"
+#include "TestExportActor.h"
 
 #include "UEPyEngine.h"
 #include "UEPyTimer.h"
@@ -196,7 +199,6 @@ static PyObject* py_ue_get_py_proxy(ue_PyUObject* self, PyObject* args)
 		Py_INCREF(self->py_proxy);
 		return (PyObject*)self->py_proxy;
 	}
-
 	Py_RETURN_NONE;
 }
 
@@ -1526,11 +1528,6 @@ static PyTypeObject ue_PyUObjectType = {
 	ue_PyUObject_methods,             /* tp_methods */
 };
 
-
-
-
-
-
 UClass* unreal_engine_new_uclass(char* name, UClass* outer_parent)
 {
 	bool is_overwriting = false;
@@ -1632,8 +1629,6 @@ UClass* unreal_engine_new_uclass(char* name, UClass* outer_parent)
 
 	return new_object;
 }
-
-
 
 int unreal_engine_py_init(ue_PyUObject*, PyObject*, PyObject*);
 
@@ -1847,6 +1842,8 @@ void unreal_engine_init_py_module()
 	PyDict_SetItemString(unreal_engine_dict, "APP_RETURN_TYPE_CANCEL", PyLong_FromLong(EAppReturnType::Cancel));
 
 #endif
+
+	test_export_actor();
 }
 
 
