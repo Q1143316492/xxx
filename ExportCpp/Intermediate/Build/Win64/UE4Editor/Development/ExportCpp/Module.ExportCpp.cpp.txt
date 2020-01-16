@@ -1,6 +1,9 @@
 D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Intermediate\Build\Win64\UE4Editor\Development\ExportCpp\Definitions.ExportCpp.h
 D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/ExportCpp.cpp
 D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Source\ExportCpp\Public\ExportCpp.h
+d:\ue4\ue_cpp\uepyexportver0\plugins\exportcpp\source\exportcpp\public\UEPreExportObject.h
+d:\ue4\ue_cpp\uepyexportver0\plugins\exportcpp\source\exportcpp\public\ExportedFunction.h
+d:\ue4\ue_cpp\uepyexportver0\plugins\exportcpp\source\exportcpp\public\UEPreExportUClass.h
 D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Source\ExportCpp\Public\ExportCppStyle.h
 D:\ue4\UE_4.23\Engine\Source\Runtime\SlateCore\Public\Styling/SlateStyle.h
 D:\ue4\UE_4.23\Engine\Source\Runtime\SlateCore\Public\Brushes/SlateBorderBrush.h
@@ -23,3 +26,6 @@ D:\ue4\UE_4.23\Engine\Source\Runtime\Json\Public\Serialization/JsonTypes.h
 d:\ue4\ue_4.23\engine\source\runtime\projects\public\CustomBuildSteps.h
 d:\ue4\ue_4.23\engine\source\runtime\projects\public\LocalizationDescriptor.h
 d:\ue4\ue_4.23\engine\source\runtime\projects\public\PluginReferenceDescriptor.h
+D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/ExportedFunction.cpp
+D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportObject.cpp
+D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportUClass.cpp

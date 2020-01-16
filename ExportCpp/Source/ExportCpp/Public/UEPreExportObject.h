@@ -9,6 +9,8 @@
 #include "UObject/UnrealType.h"
 #include "UObject/Class.h"
 
+#include "UEPreExportUClass.h"
+
 class UEPreExportObject
 {
 public:
@@ -17,8 +19,6 @@ public:
 
 	void ExportUClass();
 private:
-
-	void ExportFunctionFromUClass(UObject *obj, FString &GeneratedFileContent);
 
 	static const FString UClassNeedExport[];
 	static const FString ExportPath;

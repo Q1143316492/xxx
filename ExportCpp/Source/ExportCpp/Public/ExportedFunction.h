@@ -14,11 +14,14 @@ static enum EFunctionType
 class ExportedFunction
 {
 public:
-	ExportedFunction(UFunction *Func, UObject* obj = nullptr);
+	ExportedFunction(UFunction *Func, UObject* BelongObj = nullptr);
 	~ExportedFunction() = default;
+
+	FString ExportFunctionHeader();
+	FString GetFunctionName();
 private:
-	// todo
-	//FString ExportDefine();
+	FString GetPropertyCPPType(UProperty* Property);
+	FString GetPropertyCPPParamName(UProperty* Property);
 
 	TArray<UProperty*> params;
 	UProperty* ReturnValue;

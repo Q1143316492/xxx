@@ -14,29 +14,31 @@ UEPreExportObject::UEPreExportObject()
 
 void UEPreExportObject::ExportUClass()
 {
+	// todo 导出多个类的时候要改
 	TArray<UObject*> ObjectsToProcess;
-	GetObjectsOfClass(UClass::StaticClass(), ObjectsToProcess, true);
 	FString GeneratedFileContent;
+	// 第三个参数是否获取子类方法
+	GetObjectsOfClass(UClass::StaticClass(), ObjectsToProcess, true);
 	for (UObject *obj : ObjectsToProcess)
 	{
 		if (obj->IsA<UClass>() && ExportUClassSet.Find(obj->GetName()) != nullptr)
 		{
-			this->ExportFunctionFromUClass(obj, GeneratedFileContent);
+			UClass *Class = Cast<UClass>(obj);
+			UEPreExportUClass exp(Class);
+			exp.PreAnalyzeFunction();
+			exp.AppendCppHeaderAndDefine(GeneratedFileContent);
+			exp.AppendModuleObjectDefine(GeneratedFileContent);
+			exp.AppendPyMethodDefAndPyMethodTable(GeneratedFileContent);
+			exp.AppendPyTypeObject(GeneratedFileContent);
+			exp.AppendPyMagicFunction(GeneratedFileContent);
+			// todo 导出c api函数体
+			exp.AppendFunctionContain(GeneratedFileContent);
+
+			// todo 导出初始化模块
+			exp.AppendInitModuleHook(GeneratedFileContent);
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *GeneratedFileContent);
+
+
 		}
-	}
-}
-
-void UEPreExportObject::ExportFunctionFromUClass(UObject * obj, FString &GeneratedFileContent)
-{
-	UClass *Class = Cast<UClass>(obj);
-	if (Class == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("export uclass %s. is not a uclass"), *obj->GetName());
-		return;
-	}
-	for (TFieldIterator<UFunction> i(Class, EFieldIteratorFlags::IncludeSuper, EFieldIteratorFlags::IncludeDeprecated); i; ++i)
-	{
-		TSharedPtr<ExportedFunction> func(new ExportedFunction(*i, Class));
-
 	}
 }

@@ -145,34 +145,39 @@ static void Custom_dealloc(PyObject *self)
 
 static PyTypeObject ue_PyActorType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"ue_actor.actor",          /* tp_name */
-	sizeof(ue_ExPyActor),      /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	Custom_dealloc,		       /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	0,                         /* tp_repr */
-	0,                         /* tp_as_number */
-	0,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
-	0,                         /* tp_call */
-	0,                         /* tp_str */
-	0,						   /* tp_getattro */
-	0,						   /* tp_setattro */
-	0,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT,		   /* tp_flags */
-	"ue_actor actor",          /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	0,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	0,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	unreal_actor_methods,      /* tp_methods */
 };
+
+
+//static PyTypeObject ue_PyActorType = {
+//	PyVarObject_HEAD_INIT(NULL, 0)
+//	"ue_actor.actor",          /* tp_name */
+//	sizeof(ue_ExPyActor),      /* tp_basicsize */
+//	0,                         /* tp_itemsize */
+//	Custom_dealloc,		       /* tp_dealloc */
+//	0,                         /* tp_print */
+//	0,                         /* tp_getattr */
+//	0,                         /* tp_setattr */
+//	0,                         /* tp_reserved */
+//	0,                         /* tp_repr */
+//	0,                         /* tp_as_number */
+//	0,                         /* tp_as_sequence */
+//	0,                         /* tp_as_mapping */
+//	0,                         /* tp_hash  */
+//	0,                         /* tp_call */
+//	0,                         /* tp_str */
+//	0,						   /* tp_getattro */
+//	0,						   /* tp_setattro */
+//	0,                         /* tp_as_buffer */
+//	Py_TPFLAGS_DEFAULT,		   /* tp_flags */
+//	"ue_actor actor",          /* tp_doc */
+//	0,                         /* tp_traverse */
+//	0,                         /* tp_clear */
+//	0,                         /* tp_richcompare */
+//	0,                         /* tp_weaklistoffset */
+//	0,                         /* tp_iter */
+//	0,                         /* tp_iternext */
+//	unreal_actor_methods,      /* tp_methods */
+//};
 
 
 // todo test get_actor_location
@@ -229,9 +234,14 @@ void test_export_actor()
 	PyObject* new_unreal_actor_module = Py_InitModule3("ue_actor", NULL, NULL);
 #endif
 
-	//ue_PyActorType.tp_new = PyType_GenericNew;
+	ue_PyActorType.tp_new = PyType_GenericNew;
+	ue_PyActorType.tp_name = "ue_actor.actor";
+	ue_PyActorType.tp_basicsize = sizeof(ue_ExPyActor);
+	ue_PyActorType.tp_dealloc = (destructor)Custom_dealloc;
+	ue_PyActorType.tp_flags = Py_TPFLAGS_DEFAULT;
 	ue_PyActorType.tp_init = (initproc)ue_actor_magic_init;
-	ue_PyActorType.tp_new = (newfunc)ue_actor_magic_new;
+	ue_PyActorType.tp_methods = unreal_actor_methods;
+
 
 	if (PyType_Ready(&ue_PyActorType) < 0)
 		return;

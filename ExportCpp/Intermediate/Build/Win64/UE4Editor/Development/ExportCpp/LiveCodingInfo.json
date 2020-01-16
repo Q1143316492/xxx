@@ -4,7 +4,10 @@
 		"Module.ExportCpp.cpp.obj": [
 			"ExportCpp.cpp.obj",
 			"ExportCppCommands.cpp.obj",
-			"ExportCppStyle.cpp.obj"
+			"ExportCppStyle.cpp.obj",
+			"ExportedFunction.cpp.obj",
+			"UEPreExportObject.cpp.obj",
+			"UEPreExportUClass.cpp.obj"
 		]
 	}
 }
