@@ -25,29 +25,24 @@ public:
 	void AppendFunctionContain(FString &GeneratedFileContent);
 
 	void AppendInitModuleHook(FString &GeneratedFileContent);
+
 private:
 
-
-
+	FString ExportUFunctionContin(ExportedFunction *Func);
 
 	UClass *Class;
 
-	// 模块在c-api中的名字, typedef struct { ... } UePyObjectCppName;
-	FString UePyObjectCppName;
-	
-	// 模块下的对象名 import {PyModuleName}.{UePyObjectPyName}
-	FString PyModuleName;		
-	FString UePyObjectPyName;	
+	FString UePyObjectCppName;			// 模块中的对象名, typedef struct { ... } UePyObjectCppName;
+	FString PyTypeObjectName;			// 导出的 PyTypeObject 实例名
+	FString PyMethodDefListName;		// 导出的 PyMethod     实例名
 
-	// PyTypeObject instance name
-	FString UePyObjectTypeName;
+	FString PyModuleName;				// py中模块下的对象名 import {PyModuleName}.{UePyObjectPyName}
+	FString UePyObjectPyName;			
 
-	// PyMethodDef instance name
-	FString PyMethodDefListName;
+	FString UClassNameWithPrefix;
 
-	// magic func name
-
-
+	FString MagicFuncTpInitName;		// tp_init
+	FString MagicFuncTpDeallocName;		// tp_dealloc
 
 	TArray<TSharedPtr<ExportedFunction> > FuncList;
 

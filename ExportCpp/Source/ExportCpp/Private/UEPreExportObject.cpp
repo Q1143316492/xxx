@@ -31,14 +31,9 @@ void UEPreExportObject::ExportUClass()
 			exp.AppendPyMethodDefAndPyMethodTable(GeneratedFileContent);
 			exp.AppendPyTypeObject(GeneratedFileContent);
 			exp.AppendPyMagicFunction(GeneratedFileContent);
-			// todo 导出c api函数体
 			exp.AppendFunctionContain(GeneratedFileContent);
-
-			// todo 导出初始化模块
 			exp.AppendInitModuleHook(GeneratedFileContent);
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *GeneratedFileContent);
-
-
 		}
 	}
 }

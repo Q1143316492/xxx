@@ -4,10 +4,16 @@ UEPreExportUClass::UEPreExportUClass(UClass * Class)
 	: Class(Class)
 {
 	this->UePyObjectCppName = FString::Printf(TEXT("ue_Export%s"), *Class->GetName());
-	this->UePyObjectPyName = Class->GetName().ToLower();
-	this->PyModuleName = FString::Printf(TEXT("ue_%s"), *Class->GetName().ToLower());
-	this->UePyObjectTypeName = FString::Printf(TEXT("ue_Export%sType"), *Class->GetName());
+	this->PyTypeObjectName = FString::Printf(TEXT("ue_Export%sType"), *Class->GetName());
 	this->PyMethodDefListName = FString::Printf(TEXT("unreal_export_%s_methods"), *Class->GetName().ToLower());
+
+	this->PyModuleName = FString::Printf(TEXT("ue_%s"), *Class->GetName().ToLower());
+	this->UePyObjectPyName = Class->GetName().ToLower();
+
+	this->UClassNameWithPrefix = Class->GetPrefixCPP() + Class->GetName();
+
+	this->MagicFuncTpInitName = FString::Printf(TEXT("%s_magic_init"), *PyModuleName);
+	this->MagicFuncTpDeallocName = FString::Printf(TEXT("%s_magic_dealloc"), *PyModuleName);
 }
 
 void UEPreExportUClass::PreAnalyzeFunction()
@@ -55,7 +61,7 @@ void UEPreExportUClass::AppendPyMethodDefAndPyMethodTable(FString & GeneratedFil
 
 void UEPreExportUClass::AppendPyTypeObject(FString & GeneratedFileContent)
 {
-	GeneratedFileContent += FString::Printf(TEXT("\nstatic PyTypeObject %s = {\n"), *UePyObjectTypeName);
+	GeneratedFileContent += FString::Printf(TEXT("\nstatic PyTypeObject %s = {\n"), *PyTypeObjectName);
 	GeneratedFileContent += "	PyVarObject_HEAD_INIT(NULL, 0)\n};\n";
 }
 
@@ -74,24 +80,32 @@ void UEPreExportUClass::AppendPyMagicFunction(FString & GeneratedFileContent)
 		*(Class->GetPrefixCPP() + Class->GetName()),
 		*(Class->GetPrefixCPP() + Class->GetName()));
 
-	
-	GeneratedFileContent += FString::Printf(TEXT("static int ue_%s_magic_init(%s *self, PyObject *args, PyObject *kwds)\n{\n%s}\n"),
-								*PyModuleName,
+	GeneratedFileContent += FString::Printf(TEXT("static int %s(%s *self, PyObject *args, PyObject *kwds)\n{\n%s}\n"),
+								*MagicFuncTpInitName,
 								*UePyObjectCppName,
 								*TpInitCodeContain);
 
 	// 预定义 tp_dealloc
-	GeneratedFileContent += "static void Custom_dealloc(PyObject *self)\n{\n    Py_TYPE(self)->tp_free((PyObject *)self);\n}\n";
+	GeneratedFileContent += FString::Printf(TEXT("static void %s(PyObject *self)\n{\n    Py_TYPE(self)->tp_free((PyObject *)self);\n}\n"), 
+								*MagicFuncTpDeallocName);
 }
 
 void UEPreExportUClass::AppendFunctionContain(FString & GeneratedFileContent)
 {
 	// todo
+	GeneratedFileContent += "\n";
+	for (size_t i = 0; i < FuncList.Num(); i++)
+	{
+		FString CodeContain = ExportUFunctionContin(FuncList[i].Get());
+		GeneratedFileContent += FString::Printf(TEXT("PyObject *py_ue_export_%s(%s *self, PyObject * args)\n{\n%s\n}\n"),
+			*FuncList[i].Get()->GetFunctionName(),
+			*UePyObjectCppName,
+			*CodeContain);
+	}
 }
 
 void UEPreExportUClass::AppendInitModuleHook(FString & GeneratedFileContent)
 {
-	// todo
 	FString InitModuleCodeContain;
 	InitModuleCodeContain += FString::Printf(TEXT(
 		"#if PY_MAJOR_VERSION >= 3\n"
@@ -101,21 +115,48 @@ void UEPreExportUClass::AppendInitModuleHook(FString & GeneratedFileContent)
 		"#endif\n"
 		), *PyModuleName, *PyModuleName);
 
+	FString TpName = PyModuleName;
+	TpName += ".";
+	TpName += UePyObjectPyName;
 	InitModuleCodeContain += FString::Printf(TEXT(
-		"%s.tp_new = PyType_GenericNew;"
-		"%s.tp_name = \"%s\";"
-		"%s.tp_basicsize = sizeof(%s);"
-		"%s.tp_dealloc = (destructor)Custom_dealloc;"
-		"%s.tp_flags = Py_TPFLAGS_DEFAULT;"
-		"%s.tp_init = (initproc)ue_actor_magic_init;"
-		"%s.tp_methods = unreal_actor_methods;"
-	));
-
+		"\t%s.tp_new = PyType_GenericNew;\n"
+		"\t%s.tp_name = \"%s\";\n"
+		"\t%s.tp_basicsize = sizeof(%s);\n"
+		"\t%s.tp_dealloc = (destructor)%s;\n"
+		"\t%s.tp_flags = Py_TPFLAGS_DEFAULT;\n"
+		"\t%s.tp_init = (initproc)%s;\n"
+		"\t%s.tp_methods = %s;\n"
+	),  *PyTypeObjectName,
+	    *PyTypeObjectName, *TpName,
+	    *PyTypeObjectName, *UePyObjectCppName,
+		*PyTypeObjectName, *MagicFuncTpDeallocName,
+		*PyTypeObjectName,
+		*PyTypeObjectName, *MagicFuncTpInitName,
+		*PyTypeObjectName, *PyMethodDefListName);
+	
 	InitModuleCodeContain += FString::Printf(TEXT(
 		"\tif (PyType_Ready(&%s) < 0)\n"
 		"\t\treturn;\n"
 		"\tPy_INCREF(&%s);\n"
-		"\tPyModule_AddObject(new_module, \"%s\", (PyObject*)& ue_PyActorType);\n"
-	), *UePyObjectTypeName, *UePyObjectTypeName, *PyModuleName, *UePyObjectTypeName);
+		"\tPyModule_AddObject(new_module, \"%s\", (PyObject*)& %s);\n"
+	), *PyTypeObjectName, *PyTypeObjectName, *PyModuleName, *PyTypeObjectName);
 	GeneratedFileContent += FString::Printf(TEXT("void ue_py_export_%s_init()\n{\n%s}\n"), *PyModuleName, *InitModuleCodeContain);
+}
+
+FString UEPreExportUClass::ExportUFunctionContin(ExportedFunction * Func)
+{
+	FString CodeContains;
+	CodeContains += FString::Printf(TEXT("\
+	%s *u_obj = Cast<%s>(self->ue_object)							        \n\
+	if (u_obj == nullptr)												    \n\
+	{																		\n\
+		UE_LOG(LogTemp, Warning, TEXT(\"Cast fail\"));						\n\
+		return Py_None;														\n\
+	}																		\n\
+	"), *UClassNameWithPrefix, *UClassNameWithPrefix);
+	
+	// todo 参数解析
+	CodeContains += Func->ParseParams();
+
+	return CodeContains;
 }

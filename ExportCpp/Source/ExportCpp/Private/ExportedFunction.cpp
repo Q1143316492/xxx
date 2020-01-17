@@ -1,8 +1,10 @@
 #include "ExportedFunction.h"
 
 ExportedFunction::ExportedFunction(UFunction *Func, UObject* BelongObj)
-	: Func(Func),
-	FuncType(EFunctionType::UNKNOW_TYPE)
+	: 
+	Func(Func),
+	FuncType(EFunctionType::UNKNOW_TYPE),
+	ReturnValue(nullptr)
 {
 	for (TFieldIterator<UProperty> i(this->Func); i; ++i)
 	{
@@ -33,27 +35,48 @@ ExportedFunction::ExportedFunction(UFunction *Func, UObject* BelongObj)
 	}
 }
 
+FString ExportedFunction::ParseParams()
+{
+	FString Result;
+	Result += "// ";
+	Result += ExportUeCppFunctionHeader();
+	Result += ";\n";
+	for (size_t i = 0; i < params.Num(); i++)
+	{
+		Result += ParseUProperty(params[i]);
+	}
 
-FString ExportedFunction::ExportFunctionHeader()
+	return Result;
+}
+
+FString ExportedFunction::ExportUeCppFunctionHeader()
 {
 	FString FuncDefine;
 	if (FuncType == EFunctionType::CLASS_STATIC_FUNCTION)
 	{
 		FuncDefine += "static ";
 	}
-	FuncDefine += GetPropertyCPPType(ReturnValue);
+	if (ReturnValue == nullptr)
+	{
+		FuncDefine += "void";
+	}
+	else
+	{
+		FuncDefine += ReturnValue->GetCPPType();
+	}
 	FuncDefine += " ";
 	FuncDefine += Func->GetName() + "(";
 
+	// todo 可以添加 const & 等字段的信息
 	for (size_t i = 0; i < params.Num(); i++)
 	{
 		if (i != 0) 
 		{
 			FuncDefine += ", ";
 		}
-		FuncDefine += GetPropertyCPPType(params[i]);
+		FuncDefine += params[i]->GetCPPType();
 		FuncDefine += " ";
-		FuncDefine += FString::Printf(TEXT("param%d"), i);
+		FuncDefine += FString::Printf(TEXT("%s"), *params[i]->GetNameCPP());
 	}
 	FuncDefine += ")";
 	return FuncDefine;
@@ -64,12 +87,11 @@ FString ExportedFunction::GetFunctionName()
 	return Func->GetName();
 }
 
-FString ExportedFunction::GetPropertyCPPType(UProperty * Property)
+FString ExportedFunction::ParseUProperty(UProperty * Property)
 {
-	return Property->GetCPPType();
+	if (Property == nullptr) throw 1;
+
+
+	return FString();
 }
 
-FString ExportedFunction::GetPropertyCPPParamName(UProperty* Property)
-{
-	return "";
-}

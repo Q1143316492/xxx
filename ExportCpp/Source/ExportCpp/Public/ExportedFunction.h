@@ -17,11 +17,12 @@ public:
 	ExportedFunction(UFunction *Func, UObject* BelongObj = nullptr);
 	~ExportedFunction() = default;
 
-	FString ExportFunctionHeader();
+	FString ParseParams();
+	FString ExportUeCppFunctionHeader();
 	FString GetFunctionName();
+
 private:
-	FString GetPropertyCPPType(UProperty* Property);
-	FString GetPropertyCPPParamName(UProperty* Property);
+	FString ParseUProperty(UProperty* Property);
 
 	TArray<UProperty*> params;
 	UProperty* ReturnValue;
