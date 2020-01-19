@@ -132,9 +132,11 @@ typedef struct
 } ue_ExPyActor;
 
 PyObject *py_ue_export_get_actor_location(ue_ExPyActor *self, PyObject * args);
+PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args);
 
 static PyMethodDef unreal_actor_methods[] = {
 	{ "get_actor_location", (PyCFunction)py_ue_export_get_actor_location, METH_VARARGS, ""},
+	{ "set_actor_location", (PyCFunction)py_ue_export_set_actor_location, METH_VARARGS, ""},
 	{ NULL, NULL, NULL }
 };
 
@@ -183,7 +185,6 @@ static PyTypeObject ue_PyActorType = {
 // todo test get_actor_location
 PyObject *py_ue_export_get_actor_location(ue_ExPyActor *self, PyObject * args)
 {
-	UE_LOG(LogTemp, Warning, TEXT("py_ue_test_function"));
 	AActor *actor = Cast<AActor>(self->ue_object);
 	if (actor == nullptr)
 	{
@@ -194,6 +195,73 @@ PyObject *py_ue_export_get_actor_location(ue_ExPyActor *self, PyObject * args)
 	ue_PyFVector *ret = (ue_PyFVector *)PyObject_New(ue_PyFVector, &ue_PyFVectorType);
 	ret->vec = vec;
 	return (PyObject *)ret;
+}
+
+// todo test set_actor_location
+PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args)
+{
+	// param 1
+	PyObject *py_vec = nullptr;
+	FVector vec;
+
+	// param 2
+	bool sweep = false;
+
+	// param 3
+	FHitResult hit;
+
+	// param 4
+	// ETeleportType
+
+	bool success = false;
+
+	if (!PyArg_ParseTuple(args, "O", &py_vec))
+	{
+		return nullptr;
+	}
+	if (!PyObject_IsInstance(py_vec, (PyObject *)&ue_PyFVectorType))
+		return nullptr;
+	ue_PyFVector *ue_py_vec = ((ue_PyFVector *)py_vec);
+	if (!ue_py_vec)
+	{
+		return nullptr;
+	}
+	else
+	{
+		vec = ue_py_vec->vec;
+	}
+
+	AActor *actor = Cast<AActor>(self->ue_object);
+	if (actor == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cast fail"));
+		return Py_None;
+	}
+	success = actor->SetActorLocation(vec, false, &hit, ETeleportType::None);
+	if (success)
+	{
+		Py_RETURN_TRUE;
+	}
+	Py_RETURN_FALSE;
+
+	// return Py_BuildValue("(OO)", success ? Py_True : Py_False, py_ue_new_fhitresult(hit));
+
+	// ======================================================================
+	/*PyObject * Py_FVector = nullptr;
+	FVector vec = {};
+	bool sweep = false;
+	FHitResult ret = {};*/
+	/*ETeleportType Teleport;*/
+
+	/*if (!PyArg_ParseTuple(args, "O", &Py_FVector))
+	{
+		return Py_False;
+	}
+	if (!PyObject_IsInstance(Py_FVector, (PyObject *)&ue_PyFVectorType))
+		return Py_False;
+	vec = ((ue_PyFVector *)Py_FVector)->vec;
+	Py_DECREF(Py_FVector);
+	return actor->SetActorLocation(vec, sweep, &ret, ETeleportType::None) ? Py_True : Py_False;*/
 }
 
 // tp_init
@@ -227,7 +295,6 @@ static PyObject* ue_actor_magic_new(PyTypeObject *type, PyObject *args, PyObject
 
 void test_export_actor()
 {
-
 #if PY_MAJOR_VERSION >= 3
 	PyObject * new_unreal_actor_module = PyImport_AddModule("ue_actor");
 #else
@@ -242,10 +309,8 @@ void test_export_actor()
 	ue_PyActorType.tp_init = (initproc)ue_actor_magic_init;
 	ue_PyActorType.tp_methods = unreal_actor_methods;
 
-
 	if (PyType_Ready(&ue_PyActorType) < 0)
 		return;
 	Py_INCREF(&ue_PyActorType);
 	PyModule_AddObject(new_unreal_actor_module, "actor", (PyObject*)& ue_PyActorType);
-
 }

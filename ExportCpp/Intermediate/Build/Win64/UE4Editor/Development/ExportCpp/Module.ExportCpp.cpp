@@ -5,3 +5,4 @@
 #include "D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/ExportedFunction.cpp"
 #include "D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportObject.cpp"
 #include "D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportUClass.cpp"
+#include "D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportUEnum.cpp"

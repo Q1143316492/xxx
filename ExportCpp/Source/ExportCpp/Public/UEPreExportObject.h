@@ -10,6 +10,7 @@
 #include "UObject/Class.h"
 
 #include "UEPreExportUClass.h"
+#include "UEPreExportUEnum.h"
 
 class UEPreExportObject
 {
@@ -18,11 +19,15 @@ public:
 	~UEPreExportObject() = default;
 
 	void ExportUClass();
+
+	void ExportUEnum();
 private:
 
 	static const FString UClassNeedExport[];
+	static const FString UEnumNeedExport[];
+
 	static const FString ExportPath;
 
 	TSet<FString> ExportUClassSet;
-
+	TSet<FString> ExportUEnumSet;
 };

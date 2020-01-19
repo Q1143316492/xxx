@@ -3,6 +3,14 @@
 #include "Containers/Array.h"
 #include "UObject/UnrealType.h"
 
+//#include "Wrappers/UEPyFVector.h"
+//#include "Wrappers/UEPyFVector2D.h"
+//#include "Wrappers/UEPyFHitResult.h"
+//#include "Wrappers/UEPyFRotator.h"
+//#include "Wrappers/UEPyFTransform.h"
+//#include "Wrappers/UEPyFColor.h"
+//#include "Wrappers/UEPyFLinearColor.h"
+
 static enum EFunctionType
 {
 	UNKNOW_TYPE,
@@ -22,7 +30,7 @@ public:
 	FString GetFunctionName();
 
 private:
-	FString ParseUProperty(UProperty* Property);
+	FString ParseUProperty(UProperty* Property, TArray<FString> &ParamFormatList, TArray<FString> &ParamNameList);
 
 	TArray<UProperty*> params;
 	UProperty* ReturnValue;
