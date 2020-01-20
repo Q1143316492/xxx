@@ -1,8 +1,8 @@
 #include "ExportedFunction.h"
 
-ExportedFunction::ExportedFunction(UFunction *Func, UObject* BelongObj)
+ExportedFunction::ExportedFunction(UFunction *func, UObject* BelongObj)
 	: 
-	Func(Func),
+	Func(func),
 	ReturnValue(nullptr),
 	FuncType(EFunctionType::UNKNOW_TYPE)
 {

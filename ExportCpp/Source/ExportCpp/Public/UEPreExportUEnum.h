@@ -7,7 +7,7 @@ class UEPreExportUEnum
 public:
 	UEPreExportUEnum(UEnum *Enum);
 
-	void AppendUEnumContain(FString &GeneratedFileContent);
+	void AppendUEnumRegisterFunction(FString &GeneratedFileContent, TArray<FString> & FuncNameList);
 
 private:
 	UEnum *m_enum;

@@ -3,14 +3,6 @@
 #include "Containers/Array.h"
 #include "UObject/UnrealType.h"
 
-//#include "Wrappers/UEPyFVector.h"
-//#include "Wrappers/UEPyFVector2D.h"
-//#include "Wrappers/UEPyFHitResult.h"
-//#include "Wrappers/UEPyFRotator.h"
-//#include "Wrappers/UEPyFTransform.h"
-//#include "Wrappers/UEPyFColor.h"
-//#include "Wrappers/UEPyFLinearColor.h"
-
 static enum EFunctionType
 {
 	UNKNOW_TYPE,
@@ -22,7 +14,7 @@ static enum EFunctionType
 class ExportedFunction
 {
 public:
-	ExportedFunction(UFunction *Func, UObject* BelongObj = nullptr);
+	ExportedFunction(UFunction *func, UObject* BelongObj = nullptr);
 	~ExportedFunction() = default;
 
 	FString ParseParams();

@@ -3,6 +3,7 @@
 #include "UEPyModule.h"
 #include "TestExportActor.h"
 #include "TestExportUEnum.h"
+#include "ue_enum.h"
 
 #include "UEPyEngine.h"
 #include "UEPyTimer.h"
@@ -1846,6 +1847,7 @@ void unreal_engine_init_py_module()
 
 	test_export_actor();
 	test_export_uenum();
+	unreal_export_uenum();
 }
 
 

@@ -18,13 +18,18 @@ public:
 	UEPreExportObject();
 	~UEPreExportObject() = default;
 
-	void ExportUClass();
+	void ExportUClass(bool bExportAll = false);
 
-	void ExportUEnum();
+	void ExportUEnum(bool bExportAll = false);
+
+	void ExportUScriptStruct(bool bExportAll = false);
+
+	static bool ExportContainToFile(const FString &contain);
 private:
 
 	static const FString UClassNeedExport[];
 	static const FString UEnumNeedExport[];
+	static const FString UStructNeedExport[];
 
 	static const FString ExportPath;
 
