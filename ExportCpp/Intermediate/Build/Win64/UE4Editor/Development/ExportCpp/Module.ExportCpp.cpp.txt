@@ -31,3 +31,5 @@ D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/Exported
 D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportObject.cpp
 D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportUClass.cpp
 D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportUEnum.cpp
+D:/ue4/UE_CPP/UEPyExportVer0/Plugins/ExportCpp/Source/ExportCpp/Private/UEPreExportUScriptStruct.cpp
+D:\ue4\UE_CPP\UEPyExportVer0\Plugins\ExportCpp\Source\ExportCpp\Public\UEPreExportUScriptStruct.h

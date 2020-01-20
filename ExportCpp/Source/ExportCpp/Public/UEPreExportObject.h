@@ -29,10 +29,11 @@ private:
 
 	static const FString UClassNeedExport[];
 	static const FString UEnumNeedExport[];
-	static const FString UStructNeedExport[];
+	static const FString UScriptStructNeedExport[];
 
 	static const FString ExportPath;
 
 	TSet<FString> ExportUClassSet;
 	TSet<FString> ExportUEnumSet;
+	TSet<FString> ExportUScriptStructSet;
 };

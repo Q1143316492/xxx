@@ -219,6 +219,8 @@ PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args)
 	{
 		return nullptr;
 	}
+
+	// FVector
 	if (!PyObject_IsInstance(py_vec, (PyObject *)&ue_PyFVectorType))
 		return nullptr;
 	ue_PyFVector *ue_py_vec = ((ue_PyFVector *)py_vec);
@@ -230,7 +232,9 @@ PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args)
 	{
 		vec = ue_py_vec->vec;
 	}
+	// 
 
+	// ×ª»» + µ÷ÓÃ
 	AActor *actor = Cast<AActor>(self->ue_object);
 	if (actor == nullptr)
 	{
@@ -243,25 +247,7 @@ PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args)
 		Py_RETURN_TRUE;
 	}
 	Py_RETURN_FALSE;
-
 	// return Py_BuildValue("(OO)", success ? Py_True : Py_False, py_ue_new_fhitresult(hit));
-
-	// ======================================================================
-	/*PyObject * Py_FVector = nullptr;
-	FVector vec = {};
-	bool sweep = false;
-	FHitResult ret = {};*/
-	/*ETeleportType Teleport;*/
-
-	/*if (!PyArg_ParseTuple(args, "O", &Py_FVector))
-	{
-		return Py_False;
-	}
-	if (!PyObject_IsInstance(Py_FVector, (PyObject *)&ue_PyFVectorType))
-		return Py_False;
-	vec = ((ue_PyFVector *)Py_FVector)->vec;
-	Py_DECREF(Py_FVector);
-	return actor->SetActorLocation(vec, sweep, &ret, ETeleportType::None) ? Py_True : Py_False;*/
 }
 
 // tp_init

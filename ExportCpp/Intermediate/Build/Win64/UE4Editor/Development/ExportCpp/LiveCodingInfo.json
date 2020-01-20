@@ -8,7 +8,8 @@
 			"ExportedFunction.cpp.obj",
 			"UEPreExportObject.cpp.obj",
 			"UEPreExportUClass.cpp.obj",
-			"UEPreExportUEnum.cpp.obj"
+			"UEPreExportUEnum.cpp.obj",
+			"UEPreExportUScriptStruct.cpp.obj"
 		]
 	}
 }

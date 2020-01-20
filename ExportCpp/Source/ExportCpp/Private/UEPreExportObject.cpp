@@ -2,7 +2,7 @@
 
 const FString UEPreExportObject::UClassNeedExport[] = { "Actor" };
 const FString UEPreExportObject::UEnumNeedExport[] = { "ETeleportType" };
-const FString UEPreExportObject::UStructNeedExport[] = { "" };
+const FString UEPreExportObject::UScriptStructNeedExport[] = { "HitResult" };
 
 const FString UEPreExportObject::ExportPath = "D:\\ue4\\ext";
 
@@ -15,6 +15,10 @@ UEPreExportObject::UEPreExportObject()
 	for (size_t i = 0; i < ARRAY_COUNT(UEnumNeedExport); i++)
 	{
 		ExportUEnumSet.Add(UEnumNeedExport[i]);
+	}
+	for (size_t i = 0; i < ARRAY_COUNT(UScriptStructNeedExport); i++)
+	{
+		ExportUScriptStructSet.Add(UScriptStructNeedExport[i]);
 	}
 }
 
@@ -88,10 +92,16 @@ void UEPreExportObject::ExportUScriptStruct(bool bExportAll)
 
 	for (UObject *obj : ObjectsToProcess)
 	{
-		if (obj->IsA<UScriptStruct>() && (bExportAll || ExportUClassSet.Find(obj->GetName()) != nullptr))
+
+		if (obj->IsA<UScriptStruct>() && (bExportAll || ExportUScriptStructSet.Find(obj->GetName()) != nullptr))
 		{
-			UScriptStruct *UStruct = Cast<UScriptStruct>(obj);
-			UE_LOG(LogTemp, Warning, TEXT("%s \n"), *UStruct->GetName());
+			UScriptStruct *Struct = Cast<UScriptStruct>(obj);
+			UE_LOG(LogTemp, Warning, TEXT("find one %s \n"), *Struct->GetName());
+			for (TFieldIterator<UProperty> i(Struct, EFieldIteratorFlags::IncludeSuper, EFieldIteratorFlags::IncludeDeprecated); i; ++i)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("%s \n"), *i->GetName());
+			}
+
 		}
 	}
 }
