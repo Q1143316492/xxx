@@ -191,6 +191,14 @@ PyObject *py_ue_export_get_actor_location(ue_ExPyActor *self, PyObject * args)
 		UE_LOG(LogTemp, Warning, TEXT("Cast fail"));
 		return Py_None;
 	}
+
+	// todo 测试输出参数 X
+	//if (!PyArg_ParseTuple(args, "O", &obj))
+	//{
+	//	//return nullptr;
+	//}
+	//&obj = Py_BuildValue("i", 2);
+
 	FVector vec = actor->K2_GetActorLocation();
 	ue_PyFVector *ret = (ue_PyFVector *)PyObject_New(ue_PyFVector, &ue_PyFVectorType);
 	ret->vec = vec;
@@ -209,12 +217,12 @@ PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args)
 
 	// param 3
 	FHitResult hit;
-
 	// param 4
 	// ETeleportType
 
 	bool success = false;
 
+	// FVector bool UScriptStruct UEnum
 	if (!PyArg_ParseTuple(args, "O", &py_vec))
 	{
 		return nullptr;
@@ -232,7 +240,6 @@ PyObject *py_ue_export_set_actor_location(ue_ExPyActor *self, PyObject * args)
 	{
 		vec = ue_py_vec->vec;
 	}
-	// 
 
 	// 转换 + 调用
 	AActor *actor = Cast<AActor>(self->ue_object);

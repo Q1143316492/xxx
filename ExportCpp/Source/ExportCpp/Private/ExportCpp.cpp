@@ -61,7 +61,7 @@ void FExportCppModule::PluginButtonClicked()
 	UEPreExportObject expObj;
 	//expObj.ExportUClass();
 	//expObj.ExportUEnum(true);
-	//expObj.ExportUScriptStruct();
+	expObj.ExportUScriptStruct();
 
 	FText DialogText = FText::Format(
 							LOCTEXT("PluginButtonDialogText", "export Cpp version {0} begin"),

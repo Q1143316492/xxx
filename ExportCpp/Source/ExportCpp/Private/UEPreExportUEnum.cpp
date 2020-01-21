@@ -27,9 +27,17 @@ void UEPreExportUEnum::AppendUEnumRegisterFunction(FString & GeneratedFileConten
 	{
 		FString name = m_enum->GetNameStringByIndex(i);
 		int value = m_enum->GetValueByIndex(i);
+		FString EunumName = m_enum->GetName();
+		
+		// 枚举字段名不能为python关键字，目前就发现一个None
+		if (EunumName.Equals("None"))
+		{
+			EunumName = "NONE";
+		}
+
 		ExportFuncContain += FString::Printf(TEXT(
 			"\tPyDict_SetItemString(new_dict_%s, \"%s\", Py_BuildValue(\"i\", %d));\n"),
-			*m_enum->GetName(), *name, value);
+			*EunumName, *name, value);
 	}
 
 	// 组装函数

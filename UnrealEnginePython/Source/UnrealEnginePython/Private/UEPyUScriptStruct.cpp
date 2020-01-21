@@ -43,10 +43,10 @@ static PyObject *py_ue_uscriptstruct_set_field(ue_PyUScriptStruct *self, PyObjec
 	{
 		return nullptr;
 	}
-
 	UProperty *u_property = self->u_struct->FindPropertyByName(FName(UTF8_TO_TCHAR(name)));
 	if (!u_property)
 		return PyErr_Format(PyExc_Exception, "unable to find property %s", name);
+
 
 
 	if (!ue_py_convert_pyobject(value, u_property, self->u_struct_ptr, index))

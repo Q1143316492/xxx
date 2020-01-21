@@ -1,8 +1,7 @@
-
-
 #include "UEPyModule.h"
 #include "TestExportActor.h"
 #include "TestExportUEnum.h"
+#include "TestExportUScriptStruct.h"
 #include "ue_enum.h"
 
 #include "UEPyEngine.h"
@@ -1846,7 +1845,8 @@ void unreal_engine_init_py_module()
 #endif
 
 	test_export_actor();
-	test_export_uenum();
+	// test_export_uenum();
+	test_export_uscriptstruct();
 	unreal_export_uenum();
 }
 
